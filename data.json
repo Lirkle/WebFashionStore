@@ -1,0 +1,148 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Tabi Boots",
+      "category": "shoes",
+      "price": 1200000,
+      "image": "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400&h=500&fit=crop&crop=center",
+      "description": "Signature tabi boots with split toe design. Iconic Maison Margiela footwear that redefines traditional Japanese tabi socks.",
+      "sizes": ["36", "37", "38", "39", "40", "41", "42"],
+      "materials": "Leather, Rubber sole",
+      "inStock": true,
+      "colors": ["Black", "White"]
+    },
+    {
+      "id": 2,
+      "name": "Oversized Blazer",
+      "category": "clothing",
+      "price": 850000,
+      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=500&fit=crop&crop=center",
+      "description": "Deconstructed blazer with oversized fit. Raw edges and exposed seams showcase the brand's signature deconstruction aesthetic.",
+      "sizes": ["XS", "S", "M", "L", "XL"],
+      "materials": "Wool blend",
+      "inStock": true,
+      "colors": ["Black", "Navy"]
+    },
+    {
+      "id": 3,
+      "name": "GAT Sneakers",
+      "category": "shoes",
+      "price": 650000,
+      "image": "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400&h=500&fit=crop&crop=center",
+      "description": "German Army Trainers in white leather. Minimalist design with premium materials and exceptional craftsmanship.",
+      "sizes": ["36", "37", "38", "39", "40", "41", "42"],
+      "materials": "Leather, Rubber sole",
+      "inStock": true,
+      "colors": ["White", "Black"]
+    },
+    {
+      "id": 4,
+      "name": "Deconstructed Trench",
+      "category": "clothing",
+      "price": 950000,
+      "image": "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400&h=500&fit=crop&crop=center",
+      "description": "Asymmetric trench coat with raw edges. A modern interpretation of classic outerwear with avant-garde details.",
+      "sizes": ["XS", "S", "M", "L", "XL"],
+      "materials": "Cotton blend",
+      "inStock": true,
+      "colors": ["Beige", "Black"]
+    },
+    {
+      "id": 5,
+      "name": "5AC Bag",
+      "category": "bags",
+      "price": 450000,
+      "image": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=500&fit=crop&crop=center",
+      "description": "Minimalist crossbody bag. Clean lines and functional design with premium leather construction.",
+      "sizes": ["One Size"],
+      "materials": "Leather",
+      "inStock": true,
+      "colors": ["Black", "Brown"]
+    },
+    {
+      "id": 6,
+      "name": "Replica Sneakers",
+      "category": "shoes",
+      "price": 550000,
+      "image": "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400&h=500&fit=crop&crop=center",
+      "description": "Vintage-inspired sneakers with aged effect. Distressed leather and worn-in aesthetic for a lived-in look.",
+      "sizes": ["36", "37", "38", "39", "40", "41", "42"],
+      "materials": "Leather, Rubber sole",
+      "inStock": true,
+      "colors": ["White", "Beige"]
+    },
+    {
+      "id": 7,
+      "name": "Oversized Shirt",
+      "category": "clothing",
+      "price": 350000,
+      "image": "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400&h=500&fit=crop&crop=center",
+      "description": "Deconstructed shirt with raw seams. Relaxed fit with signature Maison Margiela deconstruction details.",
+      "sizes": ["XS", "S", "M", "L", "XL"],
+      "materials": "Cotton",
+      "inStock": true,
+      "colors": ["White", "Black"]
+    },
+    {
+      "id": 8,
+      "name": "Memory Card Holder",
+      "category": "accessories",
+      "price": 150000,
+      "image": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=500&fit=crop&crop=center",
+      "description": "Minimalist card holder in leather. Compact design with multiple card slots and premium construction.",
+      "sizes": ["One Size"],
+      "materials": "Leather",
+      "inStock": true,
+      "colors": ["Black", "Brown"]
+    },
+    {
+      "id": 9,
+      "name": "Paint Splatter Sneakers",
+      "category": "shoes",
+      "price": 750000,
+      "image": "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400&h=500&fit=crop&crop=center",
+      "description": "Artistic sneakers with paint splatter effect. Unique hand-painted details make each pair one-of-a-kind.",
+      "sizes": ["36", "37", "38", "39", "40", "41", "42"],
+      "materials": "Leather, Canvas",
+      "inStock": true,
+      "colors": ["White", "Black"]
+    },
+    {
+      "id": 10,
+      "name": "Deconstructed Jeans",
+      "category": "clothing",
+      "price": 450000,
+      "image": "https://images.unsplash.com/photo-1594938298605-c04c0c5b0b00?w=400&h=500&fit=crop&crop=center",
+      "description": "Raw edge jeans with exposed seams. Distressed denim with avant-garde construction techniques.",
+      "sizes": ["XS", "S", "M", "L", "XL"],
+      "materials": "Denim",
+      "inStock": true,
+      "colors": ["Blue", "Black"]
+    },
+    {
+      "id": 11,
+      "name": "Memory Card Wallet",
+      "category": "accessories",
+      "price": 250000,
+      "image": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=500&fit=crop&crop=center",
+      "description": "Sleek wallet with card slots. Premium leather construction with minimalist design and functional organization.",
+      "sizes": ["One Size"],
+      "materials": "Leather",
+      "inStock": true,
+      "colors": ["Black", "Brown"]
+    },
+    {
+      "id": 12,
+      "name": "Oversized Sweater",
+      "category": "clothing",
+      "price": 550000,
+      "image": "https://images.unsplash.com/photo-1594938298605-c04c0c5b0b00?w=400&h=500&fit=crop&crop=center",
+      "description": "Deconstructed knit with raw edges. Oversized silhouette with exposed seams and avant-garde details.",
+      "sizes": ["XS", "S", "M", "L", "XL"],
+      "materials": "Wool blend",
+      "inStock": true,
+      "colors": ["Black", "Gray", "White"]
+    }
+  ]
+}

@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MM - Maison Margiela Атырау</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <h1>MM Атырау</h1>
+                </div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#home" class="nav-link">Главная</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a href="#shop" class="nav-link">Магазин <i class="fas fa-chevron-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#shop" data-category="all">Все товары</a></li>
+                            <li><a href="#shop" data-category="clothing">Одежда</a></li>
+                            <li><a href="#shop" data-category="shoes">Обувь</a></li>
+                            <li><a href="#shop" data-category="accessories">Аксессуары</a></li>
+                            <li><a href="#shop" data-category="bags">Сумки</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#about" class="nav-link">О бренде</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#contact" class="nav-link">Контакты</a>
+                    </li>
+                </ul>
+                <div class="nav-actions">
+                    <div class="api-info">
+                        <div class="location-info" id="userLocation"></div>
+                        <div class="weather-info" id="weatherInfo"></div>
+                        <div class="currency-selector">
+                            <select id="currencySelect" onchange="updateCurrency()">
+                                <option value="KZT">₸ KZT</option>
+                                <option value="USD">$ USD</option>
+                                <option value="EUR">€ EUR</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="auth-buttons" id="authButtons">
+                        <button class="login-btn" onclick="openModal('loginModal')">
+                            <i class="fas fa-sign-in-alt"></i> Вход
+                        </button>
+                        <button class="register-btn" onclick="openModal('registerModal')">
+                            <i class="fas fa-user-plus"></i> Регистрация
+                        </button>
+                    </div>
+                    <div class="user-menu" id="userMenu" style="display: none;">
+                        <span class="user-name" id="userName"></span>
+                        <button class="logout-btn" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Выход
+                        </button>
+                    </div>
+                    <button class="search-btn" onclick="openModal('searchModal')">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <button class="favorites-btn" onclick="openModal('favoritesModal')">
+                        <i class="fas fa-heart"></i>
+                        <span class="favorites-count" id="favoritesCount">0</span>
+                    </button>
+                    <button class="cart-btn" onclick="openModal('cartModal')">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </button>
+                </div>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <h1>MAISON MARGIELA</h1>
+                <p>Официальный магазин в Атырау</p>
+                <button class="cta-button" onclick="scrollToSection('shop')">Смотреть коллекцию</button>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&h=800&fit=crop&crop=center" alt="Maison Margiela">
+            </div>
+        </section>
+
+        <!-- Shop Section -->
+        <section id="shop" class="shop">
+            <div class="container">
+                <div class="shop-header">
+                    <h2>Коллекция</h2>
+                    <div class="shop-controls">
+                        <div class="filter-section">
+                            <button class="filter-btn active" data-filter="all">Все</button>
+                            <button class="filter-btn" data-filter="clothing">Одежда</button>
+                            <button class="filter-btn" data-filter="shoes">Обувь</button>
+                            <button class="filter-btn" data-filter="accessories">Аксессуары</button>
+                            <button class="filter-btn" data-filter="bags">Сумки</button>
+                        </div>
+                        <div class="sort-section">
+                            <select id="sortSelect">
+                                <option value="name">По названию</option>
+                                <option value="price-low">Цена: по возрастанию</option>
+                                <option value="price-high">Цена: по убыванию</option>
+                                <option value="newest">Сначала новые</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="products-grid" id="productsGrid">
+                    <!-- Products will be loaded dynamically -->
+                </div>
+                <button class="load-more-btn" id="loadMoreBtn">Загрузить еще</button>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about">
+            <div class="container">
+                <h2>О бренде</h2>
+                <div class="tabs">
+                    <button class="tab-button active" data-tab="history">История</button>
+                    <button class="tab-button" data-tab="philosophy">Философия</button>
+                    <button class="tab-button" data-tab="craftsmanship">Мастерство</button>
+                </div>
+                <div class="tab-content">
+                    <div id="history" class="tab-panel active">
+                        <h3>История бренда</h3>
+                        <p>Основанный в 1988 году Мартином Маржелой, бренд Maison Margiela стал символом деконструктивизма в моде. Каждая коллекция - это исследование границ между традицией и инновациями.</p>
+                    </div>
+                    <div id="philosophy" class="tab-panel">
+                        <h3>Философия</h3>
+                        <p>Мы верим в силу анонимности и коллективного творчества. Каждый предмет одежды рассказывает историю, не привлекая внимания к создателю.</p>
+                    </div>
+                    <div id="craftsmanship" class="tab-panel">
+                        <h3>Мастерство</h3>
+                        <p>Каждый элемент создается с вниманием к деталям, используя традиционные техники и современные технологии.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq">
+            <div class="container">
+                <h2>Часто задаваемые вопросы</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Как определить размер?</h3>
+                            <i class="fas fa-plus"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Мы рекомендуем использовать нашу таблицу размеров. Если у вас есть сомнения, обратитесь к нашему консультанту.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Какие способы доставки доступны?</h3>
+                            <i class="fas fa-plus"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Мы предлагаем курьерскую доставку по Атырау, а также доставку по всему Казахстану через почту и курьерские службы.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Можно ли вернуть товар?</h3>
+                            <i class="fas fa-plus"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Да, вы можете вернуть товар в течение 14 дней с момента покупки при сохранении товарного вида.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>Как ухаживать за изделиями?</h3>
+                            <i class="fas fa-plus"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Каждое изделие сопровождается инструкцией по уходу. Рекомендуем профессиональную химчистку для деликатных материалов.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact">
+            <div class="container">
+                <h2>Контакты</h2>
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fas fa-store"></i>
+                            <div>
+                                <h4>Бутик в Атырау</h4>
+                                <p>ул. Абая, 15<br>Пн-Вс: 10:00 - 22:00</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <h4>Телефон</h4>
+                                <p>+7 (7122) 123-45-67</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <h4>Email</h4>
+                                <p>info@maisonmargiela.kz</p>
+                            </div>
+                        </div>
+                    </div>
+                    <form class="contact-form" id="contactForm">
+                        <div class="form-group">
+                            <input type="text" id="name" name="name" placeholder="Ваше имя" required>
+                            <span class="error-message" id="nameError"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="email" name="email" placeholder="Ваш email" required>
+                            <span class="error-message" id="emailError"></span>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="message" name="message" placeholder="Ваше сообщение" rows="5" required></textarea>
+                            <span class="error-message" id="messageError"></span>
+                        </div>
+                        <button type="submit" class="submit-btn">Отправить сообщение</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>MAISON MARGIELA</h3>
+                    <p>Официальный магазин в Атырау</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Покупателям</h4>
+                    <ul>
+                        <li><a href="#shop">Каталог</a></li>
+                        <li><a href="#about">О бренде</a></li>
+                        <li><a href="#contact">Контакты</a></li>
+                        <li><a href="#" onclick="openModal('sizeGuideModal')">Таблица размеров</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Служба поддержки</h4>
+                    <ul>
+                        <li><a href="#" onclick="openModal('shippingModal')">Доставка</a></li>
+                        <li><a href="#" onclick="openModal('returnsModal')">Возврат</a></li>
+                        <li><a href="#" onclick="openModal('careModal')">Уход за изделиями</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Подписка</h4>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Ваш email" required>
+                        <button type="submit">Подписаться</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Maison Margiela Атырау. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <!-- Product Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content product-modal">
+            <span class="close">&times;</span>
+            <div class="product-details" id="productDetails">
+                <!-- Product details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Корзина</h2>
+            <div id="cartItems"></div>
+            <div class="cart-total">
+                <p>Итого: <span id="cartTotal">0 ₽</span></p>
+                <button class="checkout-btn" onclick="checkout()">Оформить заказ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Favorites Modal -->
+    <div id="favoritesModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Избранное</h2>
+            <div id="favoritesList"></div>
+        </div>
+    </div>
+
+    <!-- Search Modal -->
+    <div id="searchModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Поиск</h2>
+            <input type="text" id="searchInput" placeholder="Поиск товаров...">
+            <div id="searchResults"></div>
+        </div>
+    </div>
+
+    <!-- Size Guide Modal -->
+    <div id="sizeGuideModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Таблица размеров</h2>
+            <div class="size-guide">
+                <div class="size-tabs">
+                    <button class="size-tab active" data-size="clothing">Одежда</button>
+                    <button class="size-tab" data-size="shoes">Обувь</button>
+                </div>
+                <div class="size-content">
+                    <div id="clothing-sizes" class="size-table active">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Размер</th>
+                                    <th>Грудь (см)</th>
+                                    <th>Талия (см)</th>
+                                    <th>Бедра (см)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>XS</td><td>82-86</td><td>62-66</td><td>88-92</td></tr>
+                                <tr><td>S</td><td>86-90</td><td>66-70</td><td>92-96</td></tr>
+                                <tr><td>M</td><td>90-94</td><td>70-74</td><td>96-100</td></tr>
+                                <tr><td>L</td><td>94-98</td><td>74-78</td><td>100-104</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="shoes-sizes" class="size-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Размер EU</th>
+                                    <th>Размер UK</th>
+                                    <th>Размер US</th>
+                                    <th>Длина стопы (см)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>36</td><td>3</td><td>5</td><td>23</td></tr>
+                                <tr><td>37</td><td>4</td><td>6</td><td>24</td></tr>
+                                <tr><td>38</td><td>5</td><td>7</td><td>25</td></tr>
+                                <tr><td>39</td><td>6</td><td>8</td><td>26</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Modals -->
+    <div id="shippingModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Доставка</h2>
+            <p>Бесплатная доставка по Атырау при заказе от 500 000 ₸. Доставка по Казахстану от 5 000 ₸.</p>
+        </div>
+    </div>
+
+    <div id="returnsModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Возврат</h2>
+            <p>Возврат товара возможен в течение 14 дней с момента покупки при сохранении товарного вида.</p>
+        </div>
+    </div>
+
+    <div id="careModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Уход за изделиями</h2>
+            <p>Рекомендуем профессиональную химчистку для деликатных материалов. Следуйте инструкциям на этикетке.</p>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content auth-modal">
+            <span class="close">&times;</span>
+            <h2>Вход в аккаунт</h2>
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" name="email" required>
+                    <span class="error-message" id="loginEmailError"></span>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Пароль</label>
+                    <input type="password" id="loginPassword" name="password" required>
+                    <span class="error-message" id="loginPasswordError"></span>
+                </div>
+                <button type="submit" class="auth-submit-btn">Войти</button>
+                <p class="auth-switch">
+                    Нет аккаунта? <a href="#" onclick="switchToRegister()">Зарегистрироваться</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content auth-modal">
+            <span class="close">&times;</span>
+            <h2>Регистрация</h2>
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <label for="registerName">Имя</label>
+                    <input type="text" id="registerName" name="name" required>
+                    <span class="error-message" id="registerNameError"></span>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" name="email" required>
+                    <span class="error-message" id="registerEmailError"></span>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Пароль</label>
+                    <input type="password" id="registerPassword" name="password" required>
+                    <span class="error-message" id="registerPasswordError"></span>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Подтвердите пароль</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                    <span class="error-message" id="confirmPasswordError"></span>
+                </div>
+                <button type="submit" class="auth-submit-btn">Зарегистрироваться</button>
+                <p class="auth-switch">
+                    Уже есть аккаунт? <a href="#" onclick="switchToLogin()">Войти</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
