@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MM - Maison Margiela Atyrau</title>
+    <title>About the Brand - Maison Margiela Atyrau</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -18,7 +18,7 @@
                 </div>
                 <ul class="nav-menu">
                     <li class="nav-item">
-                        <a href="index.html" class="nav-link active">Home</a>
+                        <a href="index.html" class="nav-link">Home</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a href="shop.html" class="nav-link">Shop <i class="fas fa-chevron-down"></i></a>
@@ -31,7 +31,7 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="about.html" class="nav-link">About</a>
+                        <a href="about.html" class="nav-link active">About</a>
                     </li>
                     <li class="nav-item">
                         <a href="contact.html" class="nav-link">Contact</a>
@@ -83,158 +83,113 @@
     <!-- Main Content -->
     <main>
         <!-- Hero Section -->
-        <section id="home" class="hero">
-            <div class="hero-content">
-                <h1>MAISON MARGIELA</h1>
-                <p>Official store in Atyrau</p>
-                <a href="shop.html" class="cta-button">View Collection</a>
-            </div>
-            <div class="hero-image">
-                <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&h=800&fit=crop&crop=center" alt="Maison Margiela">
+        <section class="page-hero">
+            <div class="container">
+                <h1>About the Brand</h1>
+                <p>History, philosophy and craftsmanship of Maison Margiela</p>
             </div>
         </section>
 
-        <!-- Featured Products Section -->
-        <section class="featured-products">
+        <!-- About Content -->
+        <section class="about-content">
             <div class="container">
-                <h2>Featured Products</h2>
-                <div class="featured-grid">
-                    <div class="featured-item" onclick="window.location.href='shop.html'">
-                        <img src="https://i.ebayimg.com/images/g/y3gAAOSwcLRfIQob/s-l1600.webp" alt="Tabi Boots">
-                        <h3>Tabi Boots</h3>
-                        <p>Iconic boots with split toe design</p>
-                    </div>
-                    <div class="featured-item" onclick="window.location.href='shop.html'">
-                        <img src="https://xcdn.next.co.uk/common/items/default/default/itemimages/3_4Ratio/product/lge/496457s.jpg?im=Resize,width=750" alt="Oversized Blazer">
-                        <h3>Oversized Blazer</h3>
-                        <p>Deconstructed blazer</p>
-                    </div>
-                    <div class="featured-item" onclick="window.location.href='shop.html'">
-                        <img src="https://02.cdn37.se/o7Z/images/2.885944/maison-margiela-5ac-classique-mini-shoulder-bag-black.jpeg" alt="5AC Bag">
-                        <h3>5AC Bag</h3>
-                        <p>Minimalist bag</p>
-                    </div>
-                </div>
-                <div class="featured-cta">
-                    <a href="shop.html" class="cta-button">View Full Collection</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- About Section -->
-        <section id="about" class="about">
-            <div class="container">
-                <h2>About the Brand</h2>
                 <div class="tabs">
                     <button class="tab-button active" data-tab="history">History</button>
                     <button class="tab-button" data-tab="philosophy">Philosophy</button>
                     <button class="tab-button" data-tab="craftsmanship">Craftsmanship</button>
+                    <button class="tab-button" data-tab="team">Team</button>
                 </div>
                 <div class="tab-content">
                     <div id="history" class="tab-panel active">
-                        <h3>Brand History</h3>
-                        <p>Founded in 1988 by Martin Margiela, Maison Margiela has become a symbol of deconstructivism in fashion. Each collection is an exploration of the boundaries between tradition and innovation.</p>
+                        <div class="content-grid">
+                            <div class="content-text">
+                                <h3>Brand History</h3>
+                                <p>Founded in 1988 by Martin Margiela, Maison Margiela has become a symbol of deconstructivism in fashion. Each collection is an exploration of the boundaries between tradition and innovation.</p>
+                                <p>From the very beginning, the brand was distinguished by an anonymous approach to design, where attention was focused on the clothing itself, not on the personality of the creator. This revolutionary vision changed the fashion industry.</p>
+                                <p>Today, Maison Margiela continues the traditions of avant-garde design, remaining true to the principles of deconstruction and reimagining classical forms.</p>
+                            </div>
+                            <div class="content-image">
+                                <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&h=400&fit=crop&crop=center" alt="История бренда">
+                            </div>
+                        </div>
                     </div>
                     <div id="philosophy" class="tab-panel">
-                        <h3>Philosophy</h3>
-                        <p>We believe in the power of anonymity and collective creativity. Each garment tells a story without drawing attention to its creator.</p>
+                        <div class="content-grid">
+                            <div class="content-text">
+                                <h3>Philosophy</h3>
+                                <p>We believe in the power of anonymity and collective creativity. Each garment tells a story without drawing attention to its creator.</p>
+                                <p>Our philosophy is based on deconstruction principles - we dismantle traditional forms and create something new, unexpected and inspiring.</p>
+                                <p>Each collection is a dialogue between past and future, between tradition and innovation, between individuality and universality.</p>
+                            </div>
+                            <div class="content-image">
+                                <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=600&h=400&fit=crop&crop=center" alt="Философия бренда">
+                            </div>
+                        </div>
                     </div>
                     <div id="craftsmanship" class="tab-panel">
-                        <h3>Craftsmanship</h3>
-                        <p>Every element is created with attention to detail, using traditional techniques and modern technologies.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- FAQ Section -->
-        <section class="faq">
-            <div class="container">
-                <h2>Frequently Asked Questions</h2>
-                <div class="faq-list">
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <h3>How to determine size?</h3>
-                            <i class="fas fa-plus"></i>
-                        </div>
-                        <div class="faq-answer">
-                            <p>We recommend using our size chart. If you have any doubts, please contact our consultant.</p>
+                        <div class="content-grid">
+                            <div class="content-text">
+                                <h3>Craftsmanship</h3>
+                                <p>Every element is created with attention to detail, using traditional techniques and modern technologies.</p>
+                                <p>Our craftsmen work with the highest quality materials, applying centuries-old tailoring traditions combined with innovative approaches.</p>
+                                <p>Each product undergoes strict quality control to meet the brand's high standards and our customers' expectations.</p>
+                            </div>
+                            <div class="content-image">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=400&fit=crop&crop=center" alt="Мастерство">
+                            </div>
                         </div>
                     </div>
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <h3>What delivery methods are available?</h3>
-                            <i class="fas fa-plus"></i>
-                        </div>
-                        <div class="faq-answer">
-                            <p>We offer courier delivery in Atyrau, as well as delivery throughout Kazakhstan via mail and courier services.</p>
-                        </div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <h3>Can I return the product?</h3>
-                            <i class="fas fa-plus"></i>
-                        </div>
-                        <div class="faq-answer">
-                            <p>Yes, you can return the product within 14 days of purchase while maintaining its original condition.</p>
-                        </div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <h3>How to care for products?</h3>
-                            <i class="fas fa-plus"></i>
-                        </div>
-                        <div class="faq-answer">
-                            <p>Each product comes with care instructions. We recommend professional dry cleaning for delicate materials.</p>
+                    <div id="team" class="tab-panel">
+                        <div class="team-section">
+                            <h3>Our Team</h3>
+                            <div class="team-grid">
+                                <div class="team-member">
+                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face" alt="Директор">
+                                    <h4>Anna Petrova</h4>
+                                    <p>Boutique Director</p>
+                                </div>
+                                <div class="team-member">
+                                    <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=200&h=200&fit=crop&crop=face" alt="Стилист">
+                                    <h4>Maria Kozlova</h4>
+                                    <p>Head Stylist</p>
+                                </div>
+                                <div class="team-member">
+                                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face" alt="Консультант">
+                                    <h4>Dmitry Smirnov</h4>
+                                    <p>Style Consultant</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Contact Section -->
-        <section id="contact" class="contact">
+        <!-- Values Section -->
+        <section class="values-section">
             <div class="container">
-                <h2>Contact</h2>
-                <div class="contact-content">
-                    <div class="contact-info">
-                        <div class="contact-item">
-                            <i class="fas fa-store"></i>
-                            <div>
-                                <h4>Boutique in Atyrau</h4>
-                                <p>ул. Абая, 15<br>Пн-Вс: 10:00 - 22:00</p>
-                            </div>
-                        </div>
-                        <div class="contact-item">
-                            <i class="fas fa-phone"></i>
-                            <div>
-                                <h4>Phone</h4>
-                                <p>+7 (7122) 123-45-67</p>
-                            </div>
-                        </div>
-                        <div class="contact-item">
-                            <i class="fas fa-envelope"></i>
-                            <div>
-                                <h4>Email</h4>
-                                <p>info@maisonmargiela.kz</p>
-                            </div>
-                        </div>
+                <h2>Our Values</h2>
+                <div class="values-grid">
+                    <div class="value-item">
+                        <i class="fas fa-lightbulb"></i>
+                        <h3>Innovation</h3>
+                        <p>Constant pursuit of new and unexpected in design</p>
                     </div>
-                    <form class="contact-form" id="contactForm">
-                        <div class="form-group">
-                            <input type="text" id="name" name="name" placeholder="Your name" required>
-                            <span class="error-message" id="nameError"></span>
-                        </div>
-                        <div class="form-group">
-                            <input type="email" id="email" name="email" placeholder="Your email" required>
-                            <span class="error-message" id="emailError"></span>
-                        </div>
-                        <div class="form-group">
-                            <textarea id="message" name="message" placeholder="Your message" rows="5" required></textarea>
-                            <span class="error-message" id="messageError"></span>
-                        </div>
-                        <button type="submit" class="submit-btn">Send message</button>
-                    </form>
+                    <div class="value-item">
+                        <i class="fas fa-heart"></i>
+                        <h3>Quality</h3>
+                        <p>Highest standards of materials and craftsmanship</p>
+                    </div>
+                    <div class="value-item">
+                        <i class="fas fa-users"></i>
+                        <h3>Community</h3>
+                        <p>Creating a community of like-minded people</p>
+                    </div>
+                    <div class="value-item">
+                        <i class="fas fa-leaf"></i>
+                        <h3>Sustainability</h3>
+                        <p>Responsible approach to production and consumption</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -279,8 +234,7 @@
         </div>
     </footer>
 
-    <!-- Modals -->
-    <!-- Product Modal -->
+    <!-- Include all modals from main page -->
     <div id="productModal" class="modal">
         <div class="modal-content product-modal">
             <span class="close">&times;</span>
@@ -290,7 +244,6 @@
         </div>
     </div>
 
-    <!-- Cart Modal -->
     <div id="cartModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -303,7 +256,6 @@
         </div>
     </div>
 
-    <!-- Favorites Modal -->
     <div id="favoritesModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -312,7 +264,6 @@
         </div>
     </div>
 
-    <!-- Search Modal -->
     <div id="searchModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -322,7 +273,64 @@
         </div>
     </div>
 
-    <!-- Size Guide Modal -->
+    <!-- Auth Modals -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content auth-modal">
+            <span class="close">&times;</span>
+            <h2>Account Login</h2>
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" name="email" required>
+                    <span class="error-message" id="loginEmailError"></span>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" name="password" required>
+                    <span class="error-message" id="loginPasswordError"></span>
+                </div>
+                <button type="submit" class="auth-submit-btn">Login</button>
+                <p class="auth-switch">
+                    No account? <a href="#" onclick="switchToRegister()">Register</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <div id="registerModal" class="modal">
+        <div class="modal-content auth-modal">
+            <span class="close">&times;</span>
+            <h2>Registration</h2>
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <label for="registerName">Name</label>
+                    <input type="text" id="registerName" name="name" required>
+                    <span class="error-message" id="registerNameError"></span>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" name="email" required>
+                    <span class="error-message" id="registerEmailError"></span>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" name="password" required>
+                    <span class="error-message" id="registerPasswordError"></span>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                    <span class="error-message" id="confirmPasswordError"></span>
+                </div>
+                <button type="submit" class="auth-submit-btn">Register</button>
+                <p class="auth-switch">
+                    Already have an account? <a href="#" onclick="switchToLogin()">Login</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Info Modals -->
     <div id="sizeGuideModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -374,7 +382,6 @@
         </div>
     </div>
 
-    <!-- Info Modals -->
     <div id="shippingModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -396,64 +403,6 @@
             <span class="close">&times;</span>
             <h2>Product Care</h2>
             <p>We recommend professional dry cleaning for delicate materials. Follow the instructions on the label.</p>
-        </div>
-    </div>
-
-    <!-- Login Modal -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content auth-modal">
-            <span class="close">&times;</span>
-            <h2>Account Login</h2>
-            <form id="loginForm" class="auth-form">
-                <div class="form-group">
-                    <label for="loginEmail">Email</label>
-                    <input type="email" id="loginEmail" name="email" required>
-                    <span class="error-message" id="loginEmailError"></span>
-                </div>
-                <div class="form-group">
-                    <label for="loginPassword">Password</label>
-                    <input type="password" id="loginPassword" name="password" required>
-                    <span class="error-message" id="loginPasswordError"></span>
-                </div>
-                <button type="submit" class="auth-submit-btn">Login</button>
-                <p class="auth-switch">
-                    No account? <a href="#" onclick="switchToRegister()">Register</a>
-                </p>
-            </form>
-        </div>
-    </div>
-
-    <!-- Register Modal -->
-    <div id="registerModal" class="modal">
-        <div class="modal-content auth-modal">
-            <span class="close">&times;</span>
-            <h2>Registration</h2>
-            <form id="registerForm" class="auth-form">
-                <div class="form-group">
-                    <label for="registerName">Name</label>
-                    <input type="text" id="registerName" name="name" required>
-                    <span class="error-message" id="registerNameError"></span>
-                </div>
-                <div class="form-group">
-                    <label for="registerEmail">Email</label>
-                    <input type="email" id="registerEmail" name="email" required>
-                    <span class="error-message" id="registerEmailError"></span>
-                </div>
-                <div class="form-group">
-                    <label for="registerPassword">Password</label>
-                    <input type="password" id="registerPassword" name="password" required>
-                    <span class="error-message" id="registerPasswordError"></span>
-                </div>
-                <div class="form-group">
-                    <label for="confirmPassword">Confirm password</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" required>
-                    <span class="error-message" id="confirmPasswordError"></span>
-                </div>
-                <button type="submit" class="auth-submit-btn">Register</button>
-                <p class="auth-switch">
-                    Already have an account? <a href="#" onclick="switchToLogin()">Login</a>
-                </p>
-            </form>
         </div>
     </div>
 

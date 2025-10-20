@@ -3,6 +3,8 @@ let products = [];
 let filteredProducts = [];
 let currentPage = 1;
 let itemsPerPage = 8;
+let totalPages = 1;
+let paginationMode = 'load-more'; // 'load-more' or 'pagination'
 let cart = [];
 let favorites = [];
 let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
@@ -17,6 +19,10 @@ const searchInput = document.getElementById('searchInput');
 const sortSelect = document.getElementById('sortSelect');
 const cartCount = document.getElementById('cartCount');
 const favoritesCount = document.getElementById('favoritesCount');
+const pagination = document.getElementById('pagination');
+const paginationInfo = document.getElementById('paginationInfo');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
@@ -27,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
     updateFavoritesCount();
     updateAuthUI();
     initializeAPIs();
+    loadUserPreferences();
 });
 
 // Load products data from JSON
@@ -209,6 +216,7 @@ function setupEventListeners() {
     // Search
     if (searchInput) {
         searchInput.addEventListener('input', handleSearch);
+        searchInput.addEventListener('focus', showRecentSearches);
     }
     
     // Tabs
@@ -324,19 +332,21 @@ function handleSearch(e) {
         const results = products.filter(product => 
             product.name.toLowerCase().includes(query) ||
             product.description.toLowerCase().includes(query) ||
-            product.category.toLowerCase().includes(query)
+            product.category.toLowerCase().includes(query) ||
+            product.materials.toLowerCase().includes(query)
         );
         
         if (searchResults) {
-            if (results.length === 0) {
-                searchResults.innerHTML = '<p>Товары не найдены</p>';
-            } else {
+                    if (results.length === 0) {
+                        searchResults.innerHTML = '<p>No products found</p>';
+                    } else {
                 searchResults.innerHTML = results.map(product => `
                     <div class="search-result-item" onclick="openProductModal(${product.id}); closeModal();">
                         <img src="${product.image}" alt="${product.name}" class="search-result-image">
                         <div class="search-result-info">
                             <h4>${product.name}</h4>
                             <p>${formatPrice(product.price)}</p>
+                            <small>${product.category}</small>
                         </div>
                     </div>
                 `).join('');
@@ -346,6 +356,14 @@ function handleSearch(e) {
     
     currentPage = 1;
     renderProducts();
+    
+    // Save search query to localStorage
+    localStorage.setItem('lastSearchQuery', query);
+    
+    // Add to recent searches
+    if (query.trim()) {
+        addToRecentSearches(query);
+    }
 }
 
 // Product rendering
@@ -354,17 +372,42 @@ function loadProducts() {
 }
 
 function renderProducts() {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const productsToShow = filteredProducts.slice(0, endIndex);
+    totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
     
-    if (productsGrid) {
-        productsGrid.innerHTML = productsToShow.map(product => createProductCard(product)).join('');
-    }
-    
-    // Show/hide load more button
-    if (loadMoreBtn) {
-        loadMoreBtn.style.display = endIndex >= filteredProducts.length ? 'none' : 'block';
+    if (paginationMode === 'load-more') {
+        const endIndex = currentPage * itemsPerPage;
+        const productsToShow = filteredProducts.slice(0, endIndex);
+        
+        if (productsGrid) {
+            productsGrid.innerHTML = productsToShow.map(product => createProductCard(product)).join('');
+        }
+        
+        // Show/hide load more button
+        if (loadMoreBtn) {
+            loadMoreBtn.style.display = endIndex >= filteredProducts.length ? 'none' : 'block';
+        }
+        if (pagination) {
+            pagination.style.display = 'none';
+        }
+    } else {
+        // Pagination mode
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const productsToShow = filteredProducts.slice(startIndex, endIndex);
+        
+        if (productsGrid) {
+            productsGrid.innerHTML = productsToShow.map(product => createProductCard(product)).join('');
+        }
+        
+        // Show/hide pagination controls
+        if (loadMoreBtn) {
+            loadMoreBtn.style.display = 'none';
+        }
+        if (pagination) {
+            pagination.style.display = totalPages > 1 ? 'flex' : 'none';
+        }
+        
+        updatePaginationInfo();
     }
 }
 
@@ -379,7 +422,7 @@ function createProductCard(product) {
                 <p class="product-price" data-original-price="${product.price}">${formatPrice(product.price)}</p>
                 <div class="product-actions">
                     <button class="add-to-cart" onclick="addToCart(${product.id})">
-                        <i class="fas fa-shopping-bag"></i> В корзину
+                        <i class="fas fa-shopping-bag"></i> Add to Cart
                     </button>
                     <button class="add-to-favorites ${isFavorited ? 'favorited' : ''}" onclick="toggleFavorite(${product.id})">
                         <i class="fas fa-heart"></i>
@@ -393,6 +436,40 @@ function createProductCard(product) {
 function loadMoreProducts() {
     currentPage++;
     renderProducts();
+}
+
+// Pagination functions
+function changePage(direction) {
+    const newPage = currentPage + direction;
+    if (newPage >= 1 && newPage <= totalPages) {
+        currentPage = newPage;
+        renderProducts();
+        // Scroll to top of products section
+        document.getElementById('shop').scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+function updatePaginationInfo() {
+    if (paginationInfo) {
+        paginationInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+    }
+    
+    if (prevBtn) {
+        prevBtn.disabled = currentPage === 1;
+    }
+    
+    if (nextBtn) {
+        nextBtn.disabled = currentPage === totalPages;
+    }
+}
+
+function togglePaginationMode() {
+    paginationMode = paginationMode === 'load-more' ? 'pagination' : 'load-more';
+    currentPage = 1;
+    renderProducts();
+    
+    // Save preference to localStorage
+    localStorage.setItem('paginationMode', paginationMode);
 }
 
 // Product modal
@@ -417,7 +494,7 @@ function openProductModal(productId) {
                 <p class="product-description">${product.description}</p>
                 
                 <div class="size-selector">
-                    <h4>Размер</h4>
+                    <h4>Size</h4>
                     <div class="size-options">
                         ${product.sizes.map(size => `
                             <button class="size-option" data-size="${size}">${size}</button>
@@ -426,7 +503,7 @@ function openProductModal(productId) {
                 </div>
                 
                 <div class="quantity-selector">
-                    <h4>Количество</h4>
+                    <h4>Quantity</h4>
                     <button class="quantity-btn" onclick="changeQuantity(-1)">-</button>
                     <input type="number" class="quantity-input" value="1" min="1" max="10">
                     <button class="quantity-btn" onclick="changeQuantity(1)">+</button>
@@ -434,10 +511,10 @@ function openProductModal(productId) {
                 
                 <div class="product-actions">
                     <button class="add-to-cart" onclick="addToCartFromModal(${product.id})">
-                        <i class="fas fa-shopping-bag"></i> Добавить в корзину
+                        <i class="fas fa-shopping-bag"></i> Add to Cart
                     </button>
                     <button class="add-to-favorites ${favorites.includes(product.id) ? 'favorited' : ''}" onclick="toggleFavorite(${product.id})">
-                        <i class="fas fa-heart"></i> ${favorites.includes(product.id) ? 'В избранном' : 'В избранное'}
+                        <i class="fas fa-heart"></i> ${favorites.includes(product.id) ? 'In Favorites' : 'Add to Favorites'}
                     </button>
                 </div>
             </div>
@@ -450,7 +527,7 @@ function openProductModal(productId) {
 // Cart functions
 function addToCart(productId, quantity = 1) {
     if (!currentUser) {
-        showNotification('Войдите в аккаунт для добавления товаров в корзину', 'error');
+        showNotification('Please login to add items to cart', 'error');
         openModal('loginModal');
         return;
     }
@@ -474,7 +551,7 @@ function addToCart(productId, quantity = 1) {
     
     saveCart();
     updateCartCount();
-    showNotification('Товар добавлен в корзину');
+    showNotification('Product added to cart');
 }
 
 function addToCartFromModal(productId) {
@@ -482,7 +559,7 @@ function addToCartFromModal(productId) {
     const selectedSize = document.querySelector('.size-option.selected');
     
     if (!selectedSize) {
-        showNotification('Выберите размер', 'error');
+        showNotification('Please select a size', 'error');
         return;
     }
     
@@ -495,7 +572,19 @@ function removeFromCart(productId) {
     cart = cart.filter(item => item.id !== productId);
     saveCart();
     updateCartCount();
+    
+    // Save current currency before updating modal
+    const currentCurrency = document.getElementById('currencySelect')?.value || 'KZT';
     updateCartModal();
+    
+    // Restore currency after updating modal
+    setTimeout(() => {
+        const currencySelect = document.getElementById('currencySelect');
+        if (currencySelect && currencySelect.value !== currentCurrency) {
+            currencySelect.value = currentCurrency;
+            updateCurrency();
+        }
+    }, 0);
 }
 
 function updateCartQuantity(productId, quantity) {
@@ -507,7 +596,19 @@ function updateCartQuantity(productId, quantity) {
             item.quantity = quantity;
             saveCart();
             updateCartCount();
+            
+            // Save current currency before updating modal
+            const currentCurrency = document.getElementById('currencySelect')?.value || 'KZT';
             updateCartModal();
+            
+            // Restore currency after updating modal
+            setTimeout(() => {
+                const currencySelect = document.getElementById('currencySelect');
+                if (currencySelect && currencySelect.value !== currentCurrency) {
+                    currencySelect.value = currentCurrency;
+                    updateCurrency();
+                }
+            }, 0);
         }
     }
 }
@@ -531,7 +632,7 @@ function updateCartModal() {
     
     if (cartItems) {
         if (cart.length === 0) {
-            cartItems.innerHTML = '<p>Корзина пуста</p>';
+            cartItems.innerHTML = '<p>Cart is empty</p>';
         } else {
             cartItems.innerHTML = cart.map(item => `
                 <div class="cart-item">
@@ -561,13 +662,13 @@ function updateCartModal() {
 
 function checkout() {
     if (!currentUser) {
-        showNotification('Войдите в аккаунт для оформления заказа', 'error');
+        showNotification('Please login to place an order', 'error');
         openModal('loginModal');
         return;
     }
     
     if (cart.length === 0) {
-        showNotification('Корзина пуста', 'error');
+        showNotification('Cart is empty', 'error');
         return;
     }
     
@@ -589,13 +690,13 @@ function checkout() {
     updateCartModal();
     closeModal();
     
-    showNotification('Заказ оформлен! Проверьте email для подтверждения.');
+    showNotification('Order placed! Check your email for confirmation.');
 }
 
 // Favorites functions
 function toggleFavorite(productId) {
     if (!currentUser) {
-        showNotification('Войдите в аккаунт для добавления товаров в избранное', 'error');
+        showNotification('Please login to add items to favorites', 'error');
         openModal('loginModal');
         return;
     }
@@ -611,7 +712,19 @@ function toggleFavorite(productId) {
     saveFavorites();
     updateFavoritesCount();
     updateFavoritesModal();
+    
+    // Save current currency before re-rendering
+    const currentCurrency = document.getElementById('currencySelect')?.value || 'KZT';
     renderProducts(); // Re-render to update favorite buttons
+    
+    // Restore currency after re-rendering
+    setTimeout(() => {
+        const currencySelect = document.getElementById('currencySelect');
+        if (currencySelect && currencySelect.value !== currentCurrency) {
+            currencySelect.value = currentCurrency;
+            updateCurrency();
+        }
+    }, 0);
 }
 
 function saveFavorites() {
@@ -631,7 +744,7 @@ function updateFavoritesModal() {
     
     if (favoritesList) {
         if (favorites.length === 0) {
-            favoritesList.innerHTML = '<p>Список избранного пуст</p>';
+            favoritesList.innerHTML = '<p>Favorites list is empty</p>';
         } else {
             const favoriteProducts = products.filter(product => favorites.includes(product.id));
             favoritesList.innerHTML = favoriteProducts.map(product => `
@@ -642,7 +755,7 @@ function updateFavoritesModal() {
                         <p class="product-price">${formatPrice(product.price)}</p>
                         <div class="product-actions">
                             <button class="add-to-cart" onclick="addToCart(${product.id})">
-                                <i class="fas fa-shopping-bag"></i> В корзину
+                                <i class="fas fa-shopping-bag"></i> Add to Cart
                             </button>
                             <button class="add-to-favorites favorited" onclick="toggleFavorite(${product.id})">
                                 <i class="fas fa-heart"></i>
@@ -768,27 +881,27 @@ function handleContactForm(e) {
     
     // Validate name
     if (!name.trim()) {
-        showFieldError('nameError', 'Имя обязательно для заполнения');
+        showFieldError('nameError', 'Name is required');
         isValid = false;
     }
     
     // Validate email
     if (!email.trim()) {
-        showFieldError('emailError', 'Email обязателен для заполнения');
+        showFieldError('emailError', 'Email is required');
         isValid = false;
     } else if (!isValidEmail(email)) {
-        showFieldError('emailError', 'Введите корректный email');
+        showFieldError('emailError', 'Please enter a valid email');
         isValid = false;
     }
     
     // Validate message
     if (!message.trim()) {
-        showFieldError('messageError', 'Сообщение обязательно для заполнения');
+        showFieldError('messageError', 'Message is required');
         isValid = false;
     }
     
     if (isValid) {
-        showNotification('Сообщение отправлено успешно!');
+        showNotification('Message sent successfully!');
         e.target.reset();
     }
 }
@@ -798,10 +911,10 @@ function handleNewsletterForm(e) {
     const email = e.target.querySelector('input[type="email"]').value;
     
     if (isValidEmail(email)) {
-        showNotification('Вы успешно подписались на рассылку!');
+        showNotification('You have successfully subscribed to the newsletter!');
         e.target.reset();
     } else {
-        showNotification('Введите корректный email', 'error');
+        showNotification('Please enter a valid email', 'error');
     }
 }
 
@@ -941,19 +1054,19 @@ function registerUser(userData) {
     // Check if user already exists
     const existingUser = users.find(user => user.email === userData.email);
     if (existingUser) {
-        showNotification('Пользователь с таким email уже существует', 'error');
+        showNotification('User with this email already exists', 'error');
         return false;
     }
     
     // Validate password confirmation
     if (userData.password !== userData.confirmPassword) {
-        showNotification('Пароли не совпадают', 'error');
+        showNotification('Passwords do not match', 'error');
         return false;
     }
     
     // Validate password length
     if (userData.password.length < 6) {
-        showNotification('Пароль должен содержать минимум 6 символов', 'error');
+        showNotification('Password must contain at least 6 characters', 'error');
         return false;
     }
     
@@ -975,7 +1088,7 @@ function registerUser(userData) {
     
     updateAuthUI();
     closeModal();
-    showNotification('Регистрация успешна! Добро пожаловать!');
+    showNotification('Registration successful! Welcome!');
     return true;
 }
 
@@ -987,10 +1100,10 @@ function loginUser(email, password) {
         localStorage.setItem('currentUser', JSON.stringify(currentUser));
         updateAuthUI();
         closeModal();
-        showNotification('Добро пожаловать!');
+        showNotification('Welcome!');
         return true;
     } else {
-        showNotification('Неверный email или пароль', 'error');
+        showNotification('Invalid email or password', 'error');
         return false;
     }
 }
@@ -999,7 +1112,7 @@ function logout() {
     currentUser = null;
     localStorage.removeItem('currentUser');
     updateAuthUI();
-    showNotification('Вы вышли из аккаунта');
+    showNotification('You have logged out');
 }
 
 function switchToRegister() {
@@ -1026,7 +1139,7 @@ function handleLoginForm(e) {
     let isValid = true;
     
     if (!email.trim()) {
-        showFieldError('loginEmailError', 'Email обязателен');
+        showFieldError('loginEmailError', 'Email is required');
         isValid = false;
     } else if (!isValidEmail(email)) {
         showFieldError('loginEmailError', 'Введите корректный email');
@@ -1034,7 +1147,7 @@ function handleLoginForm(e) {
     }
     
     if (!password.trim()) {
-        showFieldError('loginPasswordError', 'Пароль обязателен');
+        showFieldError('loginPasswordError', 'Password is required');
         isValid = false;
     }
     
@@ -1060,12 +1173,12 @@ function handleRegisterForm(e) {
     let isValid = true;
     
     if (!userData.name.trim()) {
-        showFieldError('registerNameError', 'Имя обязательно');
+        showFieldError('registerNameError', 'Name is required');
         isValid = false;
     }
     
     if (!userData.email.trim()) {
-        showFieldError('registerEmailError', 'Email обязателен');
+        showFieldError('registerEmailError', 'Email is required');
         isValid = false;
     } else if (!isValidEmail(userData.email)) {
         showFieldError('registerEmailError', 'Введите корректный email');
@@ -1073,7 +1186,7 @@ function handleRegisterForm(e) {
     }
     
     if (!userData.password.trim()) {
-        showFieldError('registerPasswordError', 'Пароль обязателен');
+        showFieldError('registerPasswordError', 'Password is required');
         isValid = false;
     } else if (userData.password.length < 6) {
         showFieldError('registerPasswordError', 'Пароль должен содержать минимум 6 символов');
@@ -1081,7 +1194,7 @@ function handleRegisterForm(e) {
     }
     
     if (!userData.confirmPassword.trim()) {
-        showFieldError('confirmPasswordError', 'Подтвердите пароль');
+        showFieldError('confirmPasswordError', 'Please confirm password');
         isValid = false;
     } else if (userData.password !== userData.confirmPassword) {
         showFieldError('confirmPasswordError', 'Пароли не совпадают');
@@ -1208,16 +1321,16 @@ async function sendEmailNotification(to, subject, message) {
         
         // В реальном приложении здесь будет вызов EmailJS API
         console.log('Email notification would be sent:', templateParams);
-        showNotification('Уведомление отправлено на email!');
+        showNotification('Notification sent to email!');
     } catch (error) {
         console.error('Error sending email notification:', error);
-        showNotification('Ошибка отправки email', 'error');
+        showNotification('Error sending email', 'error');
     }
 }
 
 function shareToSocialMedia(platform, product) {
     const url = window.location.href;
-    const text = `Посмотрите на этот товар: ${product.name} - ${formatPrice(product.price)}`;
+    const text = `Check out this product: ${product.name} - ${formatPrice(product.price)}`;
     
     let shareUrl = '';
     
@@ -1274,6 +1387,9 @@ function updateCurrency() {
     const currencySelect = document.getElementById('currencySelect');
     const selectedCurrency = currencySelect.value;
     
+    // Save currency preference
+    saveUserPreference('preferredCurrency', selectedCurrency);
+    
     // Update all product prices
     document.querySelectorAll('.product-price').forEach(priceElement => {
         const originalPrice = parseInt(priceElement.dataset.originalPrice) || 0;
@@ -1285,6 +1401,16 @@ function updateCurrency() {
     
     // Update cart total
     updateCartModal();
+    
+    // Update product modal prices
+    const productPriceModal = document.querySelector('.product-price-modal');
+    if (productPriceModal) {
+        const originalPrice = parseInt(productPriceModal.dataset.originalPrice) || 0;
+        if (originalPrice > 0) {
+            const convertedPrice = convertPrice(originalPrice, 'KZT', selectedCurrency);
+            productPriceModal.textContent = formatPriceWithCurrency(convertedPrice, selectedCurrency);
+        }
+    }
 }
 
 // Enhanced product modal with social sharing
@@ -1309,7 +1435,7 @@ function openProductModal(productId) {
                 <p class="product-description">${product.description}</p>
                 
                 <div class="size-selector">
-                    <h4>Размер</h4>
+                    <h4>Size</h4>
                     <div class="size-options">
                         ${product.sizes.map(size => `
                             <button class="size-option" data-size="${size}">${size}</button>
@@ -1318,7 +1444,7 @@ function openProductModal(productId) {
                 </div>
                 
                 <div class="quantity-selector">
-                    <h4>Количество</h4>
+                    <h4>Quantity</h4>
                     <button class="quantity-btn" onclick="changeQuantity(-1)">-</button>
                     <input type="number" class="quantity-input" value="1" min="1" max="10">
                     <button class="quantity-btn" onclick="changeQuantity(1)">+</button>
@@ -1326,15 +1452,15 @@ function openProductModal(productId) {
                 
                 <div class="product-actions">
                     <button class="add-to-cart" onclick="addToCartFromModal(${product.id})">
-                        <i class="fas fa-shopping-bag"></i> Добавить в корзину
+                        <i class="fas fa-shopping-bag"></i> Add to Cart
                     </button>
                     <button class="add-to-favorites ${favorites.includes(product.id) ? 'favorited' : ''}" onclick="toggleFavorite(${product.id})">
-                        <i class="fas fa-heart"></i> ${favorites.includes(product.id) ? 'В избранном' : 'В избранное'}
+                        <i class="fas fa-heart"></i> ${favorites.includes(product.id) ? 'In Favorites' : 'Add to Favorites'}
                     </button>
                 </div>
                 
                 <div class="social-share">
-                    <h4>Поделиться</h4>
+                    <h4>Share</h4>
                     <div class="share-buttons">
                         <button class="share-btn facebook" onclick="shareToSocialMedia('facebook', ${JSON.stringify(product).replace(/"/g, '&quot;')})">
                             <i class="fab fa-facebook-f"></i>
@@ -1360,18 +1486,129 @@ function openProductModal(productId) {
 // Email notification for order confirmation
 function sendOrderConfirmation(orderData) {
     if (currentUser) {
-        const subject = `Подтверждение заказа #${Date.now()}`;
+        const subject = `Order Confirmation #${Date.now()}`;
         const message = `
-            Спасибо за ваш заказ!
+            Thank you for your order!
             
-            Детали заказа:
+            Order details:
             ${orderData.items.map(item => `- ${item.name} x${item.quantity}`).join('\n')}
             
-            Общая сумма: ${formatPrice(orderData.total)}
+            Total amount: ${formatPrice(orderData.total)}
             
-            Мы свяжемся с вами для подтверждения доставки.
+            We will contact you to confirm delivery.
         `;
         
         sendEmailNotification(currentUser.email, subject, message);
+    }
+}
+
+// LocalStorage functions for user preferences
+function loadUserPreferences() {
+    // Load pagination mode
+    const savedPaginationMode = localStorage.getItem('paginationMode');
+    if (savedPaginationMode) {
+        paginationMode = savedPaginationMode;
+    }
+    
+    // Load last search query
+    const lastSearchQuery = localStorage.getItem('lastSearchQuery');
+    if (lastSearchQuery && searchInput) {
+        searchInput.value = lastSearchQuery;
+        if (lastSearchQuery) {
+            handleSearch({ target: { value: lastSearchQuery } });
+        }
+    }
+    
+    // Load currency preference
+    const savedCurrency = localStorage.getItem('preferredCurrency');
+    if (savedCurrency) {
+        const currencySelect = document.getElementById('currencySelect');
+        if (currencySelect) {
+            currencySelect.value = savedCurrency;
+            updateCurrency();
+        }
+    }
+    
+    // Load theme preference
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        document.body.classList.add(savedTheme);
+    }
+}
+
+function saveUserPreference(key, value) {
+    localStorage.setItem(key, value);
+}
+
+function getRecentSearches() {
+    const searches = JSON.parse(localStorage.getItem('recentSearches')) || [];
+    return searches.slice(0, 5); // Return last 5 searches
+}
+
+function addToRecentSearches(query) {
+    if (!query.trim()) return;
+    
+    let searches = JSON.parse(localStorage.getItem('recentSearches')) || [];
+    searches = searches.filter(search => search !== query);
+    searches.unshift(query);
+    searches = searches.slice(0, 10); // Keep only last 10 searches
+    
+    localStorage.setItem('recentSearches', JSON.stringify(searches));
+}
+
+function clearRecentSearches() {
+    localStorage.removeItem('recentSearches');
+}
+
+// Enhanced search with recent searches
+function showRecentSearches() {
+    const searchResults = document.getElementById('searchResults');
+    const recentSearches = getRecentSearches();
+    
+    if (recentSearches.length > 0) {
+                searchResults.innerHTML = `
+                    <div class="recent-searches">
+                        <h4>Recent Searches</h4>
+                        ${recentSearches.map(search => `
+                            <div class="search-result-item" onclick="searchInput.value='${search}'; handleSearch({target: {value: '${search}'}});">
+                                <i class="fas fa-history"></i>
+                                <span>${search}</span>
+                            </div>
+                        `).join('')}
+                        <button onclick="clearRecentSearches(); showRecentSearches();" class="clear-searches-btn">Clear History</button>
+                    </div>
+                `;
+    }
+}
+
+// Category filtering function for shop page
+function filterByCategory(category) {
+    // Update active filter button
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    const activeBtn = document.querySelector(`[data-filter="${category}"]`);
+    if (activeBtn) {
+        activeBtn.classList.add('active');
+    }
+    
+    // Filter products
+    if (category === 'all') {
+        filteredProducts = [...products];
+    } else {
+        filteredProducts = products.filter(product => product.category === category);
+    }
+    
+    // Reset pagination
+    currentPage = 1;
+    
+    // Render products
+    renderProducts();
+    
+    // Scroll to products section
+    const shopSection = document.querySelector('.shop');
+    if (shopSection) {
+        shopSection.scrollIntoView({ behavior: 'smooth' });
     }
 }
